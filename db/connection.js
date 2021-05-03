@@ -1,6 +1,6 @@
+const util = require('util')
 const mysql = require('mysql');
 const dotenv = require('dotenv');
-
 
 // ensuring our .env file is working
 const result = dotenv.config(); 
@@ -18,7 +18,10 @@ const connection = mysql.createConnection({
     database: 'company_db',
 });
 
+connection.connect();
+connection.query = util.promisify(connection.query);
+
   
-console.log(process.env.DB_PASS)
+// console.log(process.env.DB_PASS)
 
 module.exports = connection;
