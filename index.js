@@ -12,7 +12,7 @@ const init = () => {
             'View Departments',
             'View Roles',
             'View Employees',
-            'exit',
+            'Exit',
         ],
     }).then((answer) => {
         switch (answer.action) {
@@ -21,11 +21,11 @@ const init = () => {
                 break;
 
             case 'View Roles':
-                console.log('view roles');
+                viewRoles();
                 break;
 
             case 'View Employees':
-                console.log('view employees');
+                viewEmployees();
                 break;
 
             case 'Exit':
@@ -44,6 +44,22 @@ async function viewDepartments() {
 
     console.log('\n');
     console.table(departments);
+    init();
+}
+
+async function viewRoles() {
+    let roles = await store.viewRoles();
+
+    console.log('\n');
+    console.table(roles);
+    init();
+}
+
+async function viewEmployees() {
+    let employees = await store.viewEmployees();
+
+    console.log('\n');
+    console.table(employees);
     init();
 }
 
