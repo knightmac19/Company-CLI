@@ -2,9 +2,9 @@ DROP DATABASE IF EXISTS company_db;
 CREATE DATABASE company_db;
 USE company_db;
 
-CREATE TABLE department(
+CREATE TABLE departments(
     id INT(11) AUTO_INCREMENT NOT NULL,
-    name VARCHAR(30),
+    department VARCHAR(30),
     PRIMARY KEY (id)
 );
 
@@ -12,7 +12,7 @@ CREATE TABLE role(
     id INT(11) AUTO_INCREMENT NOT NULL,
     title VARCHAR(30),
     salary DECIMAL(8),
-    department_id INT,
+    departments_id INT,
     PRIMARY KEY (id)
 );
 

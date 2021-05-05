@@ -1,7 +1,7 @@
-INSERT INTO department (name) values ('Finance');
-INSERT INTO department (name) values ('Marketing');
-INSERT INTO department (name) values ('Human Resources');
-INSERT INTO department (name) values ('Sales');
-INSERT INTO department (name) values ('Customer Service');
+INSERT INTO departments (department) values ('Finance');
+INSERT INTO departments (department) values ('Marketing');
+INSERT INTO departments (department) values ('Human Resources');
+INSERT INTO departments (department) values ('Sales');
+INSERT INTO departments (department) values ('Customer Service');
 
 SELECT * FROM department;
