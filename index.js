@@ -3,6 +3,15 @@ require('console.table');
 const connection = require('./db/connection');
 const store = require('./db/index');
 
+const checkName = str => {
+    let pass = str.match(/[A-Z][A-Za-z]/);
+
+    if (pass) {
+        return true;
+    }
+    return 'Must start with capital letter, & only contain alphabetic characters'
+};
+
 const init = () => {
     inquirer.prompt({
         name: 'action',
@@ -12,6 +21,7 @@ const init = () => {
             'View Departments',
             'View Roles',
             'View Employees',
+            'Add Department',
             'Exit',
         ],
     }).then((answer) => {
@@ -26,6 +36,10 @@ const init = () => {
 
             case 'View Employees':
                 viewEmployees();
+                break;
+            
+            case 'Add Department':
+                addDepartment();
                 break;
 
             case 'Exit':
@@ -61,6 +75,27 @@ async function viewEmployees() {
     console.log('\n');
     console.table(employees);
     init();
+}
+
+async function addDepartment() {
+    let details = await inquirer.prompt([
+        {
+            type: 'input',
+            name: 'name',
+            message: 'What is the name of the department?',
+            validate: a => checkName(a)   
+        }
+    ]);
+
+    store.addDepartment(details.name);
+
+    let departments = await store.viewDepartments()
+
+    console.log('\n');
+    console.table(departments)
+
+    init();
+
 }
 
 init();

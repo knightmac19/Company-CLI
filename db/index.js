@@ -30,8 +30,17 @@ const viewEmployees = () => {
     );
 };
 
+const addDepartment = (dept) => {
+    return connection.query(
+        `
+        INSERT INTO departments (department) values ('${dept}');
+        `
+    );
+};
+
 module.exports = {
     viewDepartments: viewDepartments,
     viewRoles: viewRoles,
-    viewEmployees: viewEmployees
+    viewEmployees: viewEmployees,
+    addDepartment: addDepartment
 }
