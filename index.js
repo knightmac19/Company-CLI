@@ -4,7 +4,7 @@ const connection = require('./db/connection');
 const store = require('./db/index');
 
 const checkName = str => {
-    let pass = str.match(/[A-Z][A-Za-z]/);
+    let pass = str.match(/[A-Za-z ]/);
 
     if (pass) {
         return true;
