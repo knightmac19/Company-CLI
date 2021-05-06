@@ -13,12 +13,11 @@ const checkName = str => {
 };
 
 const checkNumeric = (num) => {
-    let pass = num.match(/[0-9]/);
 
-    if (pass && pass <= 8) {
-        return true;
+    if (isNaN(num) || num.toString().length > 9) {
+        return 'Please enter a number up to 9 digits (no commas).';
     }
-    return 'Only numeric characters. Max 8 figures.';
+    return true;
 };
 
 const init = () => {
