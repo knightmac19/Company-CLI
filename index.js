@@ -6,10 +6,19 @@ const store = require('./db/index');
 const checkName = str => {
     let pass = str.match(/[A-Za-z ]/);
 
-    if (pass) {
+    if (pass && pass.length < 30) {
         return true;
     }
-    return 'Must start with capital letter, & only contain alphabetic characters'
+    return 'Only letters & spaces. Max 30 characters.'
+};
+
+const checkNumeric = (num) => {
+    let pass = num.match(/[0-9]/);
+
+    if (pass && pass <= 8) {
+        return true;
+    }
+    return 'Only numeric characters. Max 8 figures.';
 };
 
 const init = () => {
@@ -22,6 +31,7 @@ const init = () => {
             'View Roles',
             'View Employees',
             'Add Department',
+            'Add Role',
             'Exit',
         ],
     }).then((answer) => {
@@ -40,6 +50,10 @@ const init = () => {
             
             case 'Add Department':
                 addDepartment();
+                break;
+            
+            case 'Add Role':
+                addRole();
                 break;
 
             case 'Exit':
@@ -93,6 +107,59 @@ async function addDepartment() {
 
     console.log('\n');
     console.table(departments)
+
+    init();
+
+}
+
+const createDepts = (arr) => {
+    let result = [];
+    for (var i = 0; i < arr.length; i++) {
+        let obj = {
+            id: arr[i].id,
+            name: arr[i].department
+        }
+        result.push(obj)
+    }
+    // console.log(result)
+    return result;
+}
+
+async function addRole() {
+    let departments = await store.viewDepartments();
+
+    let deptArray = departments.map(({ id, department }) => ({
+        name: department,
+        value: id
+    }));
+
+    let details = await inquirer.prompt([
+        {
+            type: 'input',
+            name: 'title',
+            message: 'What is the title of the role?',
+            validate: a => checkName(a)   
+        },
+        {
+            type: 'input',
+            name: 'salary',
+            message: 'Please write the salary.',
+            validate: a => checkNumeric(a)   
+        },
+        {
+            type: 'list',
+            name: 'department',
+            message: 'Which department does this role belong to?',
+            choices: deptArray
+        },
+    ]);
+
+    await store.addRole(details);
+
+    let roles = await store.viewRoles()
+
+    console.log('\n');
+    console.table(roles)
 
     init();
 

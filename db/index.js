@@ -31,9 +31,20 @@ const viewEmployees = () => {
 };
 
 const addDepartment = (dept) => {
+    console.log(dept)
     return connection.query(
         `
         INSERT INTO departments (department) values ('${dept}');
+        `
+    );
+};
+
+const addRole = (obj) => {
+    return connection.query(
+        `
+        INSERT INTO role 
+        (title, salary, departments_id) 
+        values ('${obj.title}', ${obj.salary}, ${obj.department});
         `
     );
 };
@@ -42,5 +53,6 @@ module.exports = {
     viewDepartments: viewDepartments,
     viewRoles: viewRoles,
     viewEmployees: viewEmployees,
-    addDepartment: addDepartment
+    addDepartment: addDepartment,
+    addRole: addRole
 }
