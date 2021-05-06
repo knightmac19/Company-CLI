@@ -13,7 +13,6 @@ const checkName = str => {
 };
 
 const checkNumeric = (num) => {
-
     if (isNaN(num) || num.toString().length > 9) {
         return 'Please enter a number up to 9 digits (no commas).';
     }
@@ -31,6 +30,7 @@ const init = () => {
             'View Employees',
             'Add Department',
             'Add Role',
+            'Add Employee',
             'Exit',
         ],
     }).then((answer) => {
@@ -53,6 +53,10 @@ const init = () => {
             
             case 'Add Role':
                 addRole();
+                break;
+
+            case 'Add Employee':
+                addEmployee();
                 break;
 
             case 'Exit':
@@ -137,7 +141,7 @@ async function addRole() {
             name: 'department',
             message: 'Which department does this role belong to?',
             choices: deptArray
-        },
+        }
     ]);
 
     await store.addRole(details);
@@ -149,6 +153,63 @@ async function addRole() {
 
     init();
 
+}
+
+async function addEmployee() {
+    let managers = await store.viewEmployees();
+
+    let managersArr = managers.map(({ ID, Employee }) => ({
+        name: Employee,
+        value: ID
+    }));
+    managersArr.unshift({name: 'No Manager', value: null});
+    
+    let roles = await store.viewRoles();
+
+    let rolesArr = roles.map(({ id, title }) => ({
+        name: title,
+        value: id
+    }));
+    
+    // console.log(managersArr)
+    // console.log('\n')
+    // console.log(rolesArr)
+    
+    let details = await inquirer.prompt([
+        {
+            type: 'input',
+            name: 'first_name',
+            message: 'What is the employee\'s first name?',
+            validate: a => checkName(a)   
+        },
+        {
+            type: 'input',
+            name: 'last_name',
+            message: 'What is the employee\'s last name?',
+            validate: a => checkName(a)   
+        },
+        {
+            type: 'list',
+            name: 'title',
+            message: 'What is the employee\'s role?',
+            choices: rolesArr
+        },
+        {
+            type: 'list',
+            name: 'manager',
+            message: 'Who is the employee\'s manager?',
+            choices: managersArr
+        }
+    ]);
+
+    await store.addEmployee(details);
+
+    let employees = await store.viewEmployees();
+    
+    console.log('\n');
+    console.table(employees);
+
+    init()
 }
 
 init();

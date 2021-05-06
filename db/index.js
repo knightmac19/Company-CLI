@@ -30,29 +30,40 @@ const viewEmployees = () => {
     );
 };
 
-const addDepartment = (dept) => {
+const addDepartment = dept => {
     console.log(dept)
     return connection.query(
         `
-        INSERT INTO departments (department) values ('${dept}');
+        INSERT INTO departments (department) values ('${dept.trim()}');
         `
     );
 };
 
-const addRole = (obj) => {
+const addRole = obj => {
     return connection.query(
         `
         INSERT INTO role 
         (title, salary, departments_id) 
-        values ('${obj.title}', ${obj.salary}, ${obj.department});
+        values ('${obj.title.trim()}', ${obj.salary}, ${obj.department});
         `
     );
 };
+
+const addEmployee = obj => {
+    return connection.query(
+        `
+        INSERT INTO employee 
+        (first_name, last_name, role_id, manager_id) 
+        values ('${obj.first_name.trim()}', '${obj.last_name.trim()}', ${obj.title}, ${obj.manager});
+        `
+    );
+}
 
 module.exports = {
     viewDepartments: viewDepartments,
     viewRoles: viewRoles,
     viewEmployees: viewEmployees,
     addDepartment: addDepartment,
-    addRole: addRole
+    addRole: addRole,
+    addEmployee: addEmployee
 }
