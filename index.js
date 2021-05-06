@@ -112,19 +112,6 @@ async function addDepartment() {
 
 }
 
-const createDepts = (arr) => {
-    let result = [];
-    for (var i = 0; i < arr.length; i++) {
-        let obj = {
-            id: arr[i].id,
-            name: arr[i].department
-        }
-        result.push(obj)
-    }
-    // console.log(result)
-    return result;
-}
-
 async function addRole() {
     let departments = await store.viewDepartments();
 
