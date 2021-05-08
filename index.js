@@ -1,6 +1,7 @@
 const inquirer = require('inquirer');
 require('console.table');
 const connection = require('./db/connection');
+// const { updateEmployeeName } = require('./db/index');
 const store = require('./db/index');
 
 const checkName = str => {
@@ -167,7 +168,7 @@ async function addEmployee() {
         name: Employee,
         value: ID
     }));
-    managersArr.unshift({name: 'No Manager', value: null});
+    managersArr.unshift({name: 'No Manager', value: 0});
     
     let roles = await store.viewRoles();
 
@@ -214,91 +215,116 @@ async function addEmployee() {
     console.log('\n');
     console.table(employees);
 
-    init()
+    init();
 }
 
+async function updateAll(obj) {
 
-async function updateEmpName() {
-    console.log('inside updateEmpName');
-    init();
+    let managers = await store.viewEmployees();
 
+    let managersArr = managers.map(({ ID, Employee }) => ({
+        name: Employee,
+        value: ID
+    }));
+    managersArr.unshift({name: 'No Manager', value: 0});
+
+    let roles = await store.viewRoles();
+
+    let rolesArr = roles.map(({ id, title }) => ({
+        name: title,
+        value: id
+    }));
+
+    let details = await inquirer.prompt([
+        {
+            type: 'input',
+            name: 'first_name',
+            message: 'What is the employee\'s updated first name?',
+            validate: a => checkName(a)   
+        },
+        {
+            type: 'input',
+            name: 'last_name',
+            message: 'What is the employee\'s updated last name?',
+            validate: a => checkName(a)   
+        },
+        {
+            type: 'list',
+            name: 'role',
+            message: 'What is the employee\'s updated role?',
+            choices: rolesArr
+        },
+        {
+            type: 'list',
+            name: 'manager',
+            message: 'Who is the employee\'s updated manager?',
+            choices: managersArr
+        }
+    ]);
+    
+
+    await store.updateEmployeeAll(details, obj.id)
+
+    viewEmployees();
 }
 
-async function updateEmpRole() {
-    console.log('inside updateEmpRole');
-    init();
-
+async function updateEmployeeName(obj) {
+    
 }
 
-async function updateEmpManager() {
-    console.log('inside updateEmpManager');
-    init();
+async function updateEmployeeRole(obj) {
+    
+}
 
+async function updateEmployeeManager(obj) {
+    
 }
 
 async function updateEmployee() {
-    // let managers = await store.viewEmployees();
+    let employees = await store.viewEmployees();
 
-    // let managersArr = managers.map(({ ID, Employee }) => ({
-    //     name: Employee,
-    //     value: ID
-    // }));
-    // managersArr.unshift({name: 'No Manager', value: null});
-    
-    // let roles = await store.viewRoles();
+    let employeesArr = employees.map(({ ID, Employee }) => ({
+        name: Employee,
+        value: ID
+    }));
 
-    // let rolesArr = roles.map(({ id, title }) => ({
-    //     name: title,
-    //     value: id
-    // }));
-
-    inquirer.prompt({
-
-        name: 'action',
+    let employeeID = await inquirer.prompt({
+        name: 'id',
         type: 'list',
-        message: 'Which field would you like to update?',
+        message: 'Which employee would you like to update?',
+        choices: employeesArr
+    });
+
+    await inquirer.prompt({
+        name: 'action',
+        type:'list',
+        message: 'Which field(s) would you like to update?',
         choices: [
-            'Name',
-            'Role',
-            'Manager',
+            'Update All Fields',
+            'Update Name',
+            'Update Role',
+            'Update Manager',
             'Return to Main Menu',
-            'Exit Application'
-        ],
-
-        }).then(answer => {
+        ]
+    }).then((answer) => {
         switch (answer.action) {
-            case 'Name':
-                updateEmpName();
+            case 'Update All Fields':
+                updateAll(employeeID);
                 break;
             
-            case 'Role':
-                updateEmpRole();
+            case 'Update Name':
+                updateEmployeeName(employeeID);
                 break;
 
-            case 'Manager':
-                updateEmpManager();
+            case 'Update Role':
+                updateEmployeeRole(employeeID);
                 break;
 
-            case 'Return to Main Menu':
-                console.log('\n')
-                init();
-                break;
-            
-            case 'Exit Application':
-                connection.end();
+            case 'Update Manager':
+                updateEmployeeManager(employeeID);
                 break;
         }
-    })
-    // get roles
-    // get managers
-
-    // prompt: what do you want to update
-        // choices: name, role, manager
-            // example: if 'first name' --> then 
-            // run update first name function
-            // send response to store to update first name
-            // get all the employees and console.table  
-
+    });
 }
 
 init();
