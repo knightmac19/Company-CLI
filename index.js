@@ -31,6 +31,7 @@ const init = () => {
             'Add Department',
             'Add Role',
             'Add Employee',
+            'Update Employee',
             'Exit',
         ],
     }).then((answer) => {
@@ -58,6 +59,10 @@ const init = () => {
             case 'Add Employee':
                 addEmployee();
                 break;
+
+            case 'Update Employee':
+                updateEmployee();
+                break;                
 
             case 'Exit':
                 connection.end();
@@ -210,6 +215,90 @@ async function addEmployee() {
     console.table(employees);
 
     init()
+}
+
+
+async function updateEmpName() {
+    console.log('inside updateEmpName');
+    init();
+
+}
+
+async function updateEmpRole() {
+    console.log('inside updateEmpRole');
+    init();
+
+}
+
+async function updateEmpManager() {
+    console.log('inside updateEmpManager');
+    init();
+
+}
+
+async function updateEmployee() {
+    // let managers = await store.viewEmployees();
+
+    // let managersArr = managers.map(({ ID, Employee }) => ({
+    //     name: Employee,
+    //     value: ID
+    // }));
+    // managersArr.unshift({name: 'No Manager', value: null});
+    
+    // let roles = await store.viewRoles();
+
+    // let rolesArr = roles.map(({ id, title }) => ({
+    //     name: title,
+    //     value: id
+    // }));
+
+    inquirer.prompt({
+
+        name: 'action',
+        type: 'list',
+        message: 'Which field would you like to update?',
+        choices: [
+            'Name',
+            'Role',
+            'Manager',
+            'Return to Main Menu',
+            'Exit Application'
+        ],
+
+        }).then(answer => {
+        switch (answer.action) {
+            case 'Name':
+                updateEmpName();
+                break;
+            
+            case 'Role':
+                updateEmpRole();
+                break;
+
+            case 'Manager':
+                updateEmpManager();
+                break;
+
+            case 'Return to Main Menu':
+                console.log('\n')
+                init();
+                break;
+            
+            case 'Exit Application':
+                connection.end();
+                break;
+        }
+    })
+    // get roles
+    // get managers
+
+    // prompt: what do you want to update
+        // choices: name, role, manager
+            // example: if 'first name' --> then 
+            // run update first name function
+            // send response to store to update first name
+            // get all the employees and console.table  
+
 }
 
 init();
