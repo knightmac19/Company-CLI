@@ -269,7 +269,26 @@ async function updateAll(obj) {
 }
 
 async function updateEmployeeName(obj) {
+
+    let details = await inquirer.prompt([
+        {
+            type: 'input',
+            name: 'first_name',
+            message: 'What is the employee\'s updated first name?',
+            validate: a => checkName(a)   
+        },
+        {
+            type: 'input',
+            name: 'last_name',
+            message: 'What is the employee\'s updated last name?',
+            validate: a => checkName(a)   
+        }
+    ]);
     
+
+    await store.updateEmployeeName(details, obj.id)
+
+    viewEmployees();
 }
 
 async function updateEmployeeRole(obj) {
