@@ -317,6 +317,28 @@ async function updateEmployeeRole(obj) {
 }
 
 async function updateEmployeeManager(obj) {
+
+    let managers = await store.viewEmployees();
+
+    let managersArr = managers.map(({ ID, Employee }) => ({
+        name: Employee,
+        value: ID
+    }));
+    managersArr.unshift({ name: 'No Manager', value:0 });
+
+    let details = await inquirer.prompt({
+
+        type: 'list',
+        name: 'manager',
+        message: 'Who is the employee\'s updated manager?',
+        choices: managersArr
+
+    });
+    
+
+    await store.updateEmployeeManager(details, obj.id)
+
+    viewEmployees();
     
 }
 

@@ -96,6 +96,17 @@ const updateEmployeeRole = (obj, id) => {
     );
 }
 
+const updateEmployeeManager = (obj, id) => {
+    return connection.query(
+        `
+        UPDATE employee
+        SET 
+        manager_id = '${obj.manager}'
+        WHERE id = ${id};
+        `
+    );
+}
+
 module.exports = {
     viewDepartments: viewDepartments,
     viewRoles: viewRoles,
@@ -105,5 +116,6 @@ module.exports = {
     addEmployee: addEmployee,
     updateEmployeeAll: updateEmployeeAll,
     updateEmployeeName: updateEmployeeName,
-    updateEmployeeRole: updateEmployeeRole
+    updateEmployeeRole: updateEmployeeRole,
+    updateEmployeeManager: updateEmployeeManager
 }
