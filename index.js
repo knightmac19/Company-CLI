@@ -292,6 +292,27 @@ async function updateEmployeeName(obj) {
 }
 
 async function updateEmployeeRole(obj) {
+
+    let roles = await store.viewRoles();
+
+    let rolesArr = roles.map(({ id, title }) => ({
+        name: title,
+        value: id
+    }));
+
+    let details = await inquirer.prompt({
+
+        type: 'list',
+        name: 'role',
+        message: 'What is the employee\'s updated role?',
+        choices: rolesArr
+
+    });
+    
+
+    await store.updateEmployeeRole(details, obj.id)
+
+    viewEmployees();
     
 }
 
