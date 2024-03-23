@@ -129,6 +129,8 @@ async function addRole() {
         value: id
     }));
 
+    console.log(deptArray)
+
     let details = await inquirer.prompt([
         {
             type: 'input',

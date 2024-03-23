@@ -1,20 +1,19 @@
-const connection = require('./connection');
+const connection = require("./connection");
 
 const viewDepartments = () => {
-    return connection.query('SELECT * FROM departments');
+  return connection.query("SELECT * FROM departments");
 };
 
 const viewRoles = () => {
-    return connection.query(`
+  return connection.query(`
         SELECT role.id, role.title, role.salary, departments.department 
         FROM role 
         LEFT JOIN departments 
-        ON role.departments_id = departments.id;`
-    );
+        ON role.departments_id = departments.id;`);
 };
 
 const viewEmployees = () => {
-    return connection.query(`
+  return connection.query(`
         SELECT e1.id AS ID, 
         CONCAT(e1.first_name, " ", e1.last_name) AS Employee, 
         role.title AS Title,
@@ -26,42 +25,42 @@ const viewEmployees = () => {
         LEFT JOIN role 
         ON e1.role_id = role.id
         LEFT JOIN departments 
-        ON role.departments_id = departments.id;`
-    );
+        ON role.departments_id = departments.id;`);
 };
 
-const addDepartment = dept => {
-    console.log(dept)
-    return connection.query(
-        `
+const addDepartment = (dept) => {
+  return connection.query(
+    `
         INSERT INTO departments (department) values ('${dept.trim()}');
         `
-    );
+  );
 };
 
-const addRole = obj => {
-    return connection.query(
-        `
+const addRole = (obj) => {
+  return connection.query(
+    `
         INSERT INTO role 
         (title, salary, departments_id) 
         values ('${obj.title.trim()}', ${obj.salary}, ${obj.department});
         `
-    );
+  );
 };
 
-const addEmployee = obj => {
-    return connection.query(
-        `
+const addEmployee = (obj) => {
+  return connection.query(
+    `
         INSERT INTO employee 
         (first_name, last_name, role_id, manager_id) 
-        values ('${obj.first_name.trim()}', '${obj.last_name.trim()}', ${obj.title}, ${obj.manager});
+        values ('${obj.first_name.trim()}', '${obj.last_name.trim()}', ${
+      obj.title
+    }, ${obj.manager});
         `
-    );
-}
+  );
+};
 
 const updateEmployeeAll = (obj, id) => {
-    return connection.query(
-        `
+  return connection.query(
+    `
         UPDATE employee
         SET 
         first_name = '${obj.first_name}', 
@@ -70,52 +69,52 @@ const updateEmployeeAll = (obj, id) => {
         manager_id = '${obj.manager}'
         WHERE id = ${id};
         `
-    );
-}
+  );
+};
 
 const updateEmployeeName = (obj, id) => {
-    return connection.query(
-        `
+  return connection.query(
+    `
         UPDATE employee
         SET 
         first_name = '${obj.first_name}', 
         last_name = '${obj.last_name}'
         WHERE id = ${id};
         `
-    );
-}
+  );
+};
 
 const updateEmployeeRole = (obj, id) => {
-    return connection.query(
-        `
+  return connection.query(
+    `
         UPDATE employee
         SET 
         role_id = '${obj.role}'
         WHERE id = ${id};
         `
-    );
-}
+  );
+};
 
 const updateEmployeeManager = (obj, id) => {
-    return connection.query(
-        `
+  return connection.query(
+    `
         UPDATE employee
         SET 
         manager_id = '${obj.manager}'
         WHERE id = ${id};
         `
-    );
-}
+  );
+};
 
 module.exports = {
-    viewDepartments: viewDepartments,
-    viewRoles: viewRoles,
-    viewEmployees: viewEmployees,
-    addDepartment: addDepartment,
-    addRole: addRole,
-    addEmployee: addEmployee,
-    updateEmployeeAll: updateEmployeeAll,
-    updateEmployeeName: updateEmployeeName,
-    updateEmployeeRole: updateEmployeeRole,
-    updateEmployeeManager: updateEmployeeManager
-}
+  viewDepartments: viewDepartments,
+  viewRoles: viewRoles,
+  viewEmployees: viewEmployees,
+  addDepartment: addDepartment,
+  addRole: addRole,
+  addEmployee: addEmployee,
+  updateEmployeeAll: updateEmployeeAll,
+  updateEmployeeName: updateEmployeeName,
+  updateEmployeeRole: updateEmployeeRole,
+  updateEmployeeManager: updateEmployeeManager,
+};
