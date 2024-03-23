@@ -4,4 +4,4 @@ INSERT INTO departments (department) values ('Human Resources');
 INSERT INTO departments (department) values ('Sales');
 INSERT INTO departments (department) values ('Customer Service');
 
-SELECT * FROM department;
+SELECT * FROM departments;
